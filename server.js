@@ -20,8 +20,18 @@ function load_album_list(callback) {
 
 function handle_incoming_request(req, res) {
     console.log("INCOMING REQUEST: " + req.method + " " + req.url);
-    res.writeHead(200, {"Content-Type" : "application/json"});
-    res.end(JSON.stringify( { error: null }) + "\n");
+    load_album_list(function(err, albums) {
+        if(err) {
+            res.writeHead(503, {"Content-Type" : "application/json"});
+            res.end(JSON.stringify(err) + "\n");
+            return;
+        }
+
+        var out = { error: null,
+                    data: {albums: albums}};
+        res.writeHead(200, {"Content-Type" : "application/json"});
+        res.end(JSON.stringify(out) + "\n");
+    });
 }
 
 var s = http.createServer(handle_incoming_request);
