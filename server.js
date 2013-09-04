@@ -133,6 +133,8 @@ function send_success(res, data) {
     res.end(JSON.stringify(output) + "\n");
 }
 
+// not sure about this one here... code may be colliding?
+
 function send_failure(res, code, err) {
     var code = (err.code) ? err.code : err.name;
     res.writeHead(code, { "Content-Type" : "application/json" });
