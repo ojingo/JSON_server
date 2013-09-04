@@ -9,7 +9,7 @@ var http = require('http');
 var fs = require('fs');
 
 function load_album_list(callback) {
-    fs.readdir("albums/", function(err, files) {
+    fs.readdir("albums", function(err, files) {
         if(err) {
             callback(err);
             return;
@@ -36,4 +36,6 @@ function handle_incoming_request(req, res) {
 
 var s = http.createServer(handle_incoming_request);
 s.listen(8080);
+
+
 
