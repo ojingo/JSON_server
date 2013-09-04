@@ -121,6 +121,20 @@ function handle_get_album(req, res) {
 
 // make error goes here...
 
+function make_error(err, msg) {
+    var e = new Error(msg);
+    e.code = err;
+    return e;
+}
+
+function send_success(res, data) {
+    res.writeHead(200, {"Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: code, message: err.message }) + "\n");
+}
+
+// invalid resource goes here...
+
+
 var s = http.createServer(handle_incoming_request);
 s.listen(8080);
 
