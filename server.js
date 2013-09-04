@@ -14,7 +14,17 @@ function load_album_list(callback) {
             callback(err);
             return;
         }
-        callback(null, files);
+
+        var only_dirs = [];
+        for (var i = 0; i < files.length; i++) {
+            fs.stat("albums/" + files[i],
+            function(err, stats) {
+                if(stats.isDirectory()) {
+                    only_dirs.push(files[i]);
+                }
+            });
+        }
+        callback(null, only_dirs);
     });
 }
 
