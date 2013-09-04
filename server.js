@@ -6,6 +6,17 @@
  * Author:  TJ Marbois
  */
 var http = require('http');
+var fs = require('fs');
+
+function load_album_list(callback) {
+    fs.readdir("albums/", function(err, files) {
+        if(err) {
+            callback(err);
+            return;
+        }
+        callback(null, files);
+    });
+}
 
 function handle_incoming_request(req, res) {
     console.log("INCOMING REQUEST: " + req.method + " " + req.url);
