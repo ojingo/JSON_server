@@ -16,18 +16,27 @@ function load_album_list(callback) {
         }
 
         var only_dirs = [];
-        for (var i = 0; i < files.length; i++) {
-            // this is where it goes bad... async calls are sent to the event cue but not executed till this code full runs to the end
-            // so the data ends up being empty??
-
-            fs.stat("albums/" + files[i], function(err, stats) {
-                if(stats.isDirectory()) {
-                    only_dirs.push(files[i]);
-                }
-            });
-        }
-        callback(null, only_dirs);
-    });
+        (function iterator(index) {
+            if (index == files.length) {
+                callback(null, only_dirs);
+                return;
+            }
+         fs.stat(
+             "albums/" + files[index],
+             function(err, stats) {
+             if(err) {
+                 callback(err);
+                 return;
+             }
+             if (stats.isDirectory()) {
+                 only_dirs.push(files[index]);
+             }
+             iterator(index + 1)
+             }
+         );
+        })(0);
+    }
+    );
 }
 
 function handle_incoming_request(req, res) {
