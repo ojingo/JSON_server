@@ -129,11 +129,25 @@ function make_error(err, msg) {
 
 function send_success(res, data) {
     res.writeHead(200, {"Content-Type": "application/json" });
+    var output = { error: null, data: data };
+    res.end(JSON.stringify(output) + "\n");
+}
+
+function send_failure(res, code, err) {
+    var code = (err.code) ? err.code : err.name;
+    res.writeHead(code, { "Content-Type" : "application/json" });
     res.end(JSON.stringify({ error: code, message: err.message }) + "\n");
 }
 
 // invalid resource goes here...
 
+function invalid_resource() {
+    return make_error("invalid_resource", "the requested resource does not exist.");
+}
+
+function no_such_album() {
+    return make_error("no_such_album", "the specified album does not exist");
+}
 
 var s = http.createServer(handle_incoming_request);
 s.listen(8080);
