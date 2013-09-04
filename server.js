@@ -17,6 +17,9 @@ function load_album_list(callback) {
 
         var only_dirs = [];
         for (var i = 0; i < files.length; i++) {
+            // this is where it goes bad... async calls are sent to the event cue but not executed till this code full runs to the end
+            // so the data ends up being empty??
+
             fs.stat("albums/" + files[i], function(err, stats) {
                 if(stats.isDirectory()) {
                     only_dirs.push(files[i]);
