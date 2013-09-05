@@ -112,8 +112,19 @@ function handle_list_albums(req, res) {
 
 function handle_get_album(req, res) {
     // format of request is /albums/album_name.json
+    // get the GET parameters from the URL
+    var getp = req.parsed_url.query;
+    var page_num = getp.page ? getp.page: 0;
+    var page_size = getp.page_size ? getp.page_size: 1000;
+
+    if(isNaN(parseInt(page_num))) page_num = 0;
+    if(isNaN(parseInt(page_size))) page_size = 1000;
+
     var album_name = req.url.substr(7, req.url.length - 12);
-    load_album(album_name, function(err, album_contents) {
+    load_album(album_name,
+                page_num,
+                page_size,
+                function(err, album_contents) {
         if(err && err.error == "no_such_album") {
             send_failure(res, 400, err);
         } else if (err) {
