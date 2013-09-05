@@ -136,7 +136,9 @@ function handle_get_album(req, res) {
     console.log("page_num = " + page_num);
     console.log("page_size = " + page_size);
 
-    var album_name = req.url.substr(7, req.url.length - 12);
+    var core_url = req.parsed_url.pathname;
+
+    var album_name = core_url.substr(7, core_url.length - 12);
     load_album(album_name,
                 page_num,
                 page_size,
