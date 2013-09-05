@@ -42,7 +42,7 @@ function load_album_list(callback) {
     );
 }
 
-function load_album(album_name, callback) {
+function load_album(album_name, page, page_size, callback) {
     // assume directory in albums subfolder is an album
     fs.readdir(
         "albums/" + album_name, function(err, files) {
@@ -60,8 +60,11 @@ function load_album(album_name, callback) {
 
             (function iterator(index) {
                 if (index == files.length) {
+                    var ps;
+                    // slice fails gracefully if params are out of range
+                    ps = only_files.splice(page * page_size, page_size);
                     var obj = { short_name: album_name,
-                                photos: only_files };
+                                photos: ps };
                     callback(null, obj);
                     return;
                 }
