@@ -123,9 +123,18 @@ function handle_get_album(req, res) {
     console.log("This is the getp: " + getp.page + ' ' + getp.page_size);
     var page_num = getp.page ? getp.page: 0;
     var page_size = getp.page_size ? getp.page_size: 1000;
+    console.log("This is the getpAfter: " + getp.page + ' ' + getp.page_size);
 
-    if(isNaN(parseInt(page_num))) page_num = 0;
-    if(isNaN(parseInt(page_size))) page_size = 1000;
+    if(isNaN(parseInt(page_num))) {
+        page_num = 0;
+    }
+
+    if(isNaN(parseInt(page_size))) {
+        page_size = 1000;
+    }
+
+    console.log("page_num = " + page_num);
+    console.log("page_size = " + page_size);
 
     var album_name = req.url.substr(7, req.url.length - 12);
     load_album(album_name,
