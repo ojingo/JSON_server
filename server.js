@@ -7,6 +7,7 @@
  */
 var http = require('http');
 var fs = require('fs');
+var url = require('url');
 
 function load_album_list(callback) {
     fs.readdir("albums/", function(err, files) {
@@ -85,9 +86,13 @@ function load_album(album_name, callback) {
 
 function handle_incoming_request(req, res) {
     console.log("INCOMING REQUEST: " + req.method + " " + req.url);
-    if (req.url == '/albums.json') {
+
+    req.parsed_url = url.parse(req.url, true);
+    var core_url = req.parsed_url.pathname;
+
+    if (core_url == '/albums.json') {
         handle_list_albums(req, res);
-    } else if (req.url.substr(0, 7) == '/albums' && req.url.substr(req.url.length - 5) == '.json') {
+    } else if (core_url.substr(0, 7) == '/albums' && req.url.substr(req.url.length - 5) == '.json') {
         handle_get_album(req, res);
     } else {
         send_failure(res, 404, invalid_resource());
