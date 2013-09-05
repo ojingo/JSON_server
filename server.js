@@ -92,10 +92,12 @@ function handle_incoming_request(req, res) {
 
     req.parsed_url = url.parse(req.url, true);
     var core_url = req.parsed_url.pathname;
+    console.log("This is the core_url: " + core_url);
+
 
     if (core_url == '/albums.json') {
         handle_list_albums(req, res);
-    } else if (core_url.substr(0, 7) == '/albums' && req.url.substr(req.url.length - 5) == '.json') {
+    } else if (core_url.substr(0, 7) == '/albums' && core_url.substr(core_url.length - 5) == '.json') {
         handle_get_album(req, res);
     } else {
         send_failure(res, 404, invalid_resource());
@@ -117,6 +119,7 @@ function handle_get_album(req, res) {
     // format of request is /albums/album_name.json
     // get the GET parameters from the URL
     var getp = req.parsed_url.query;
+    console.log("This is the getp: " + getp.toString());
     var page_num = getp.page ? getp.page: 0;
     var page_size = getp.page_size ? getp.page_size: 1000;
 
