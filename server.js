@@ -93,6 +93,7 @@ function handle_incoming_request(req, res) {
     req.parsed_url = url.parse(req.url, true);
     var core_url = req.parsed_url.pathname;
     console.log("This is the core_url: " + core_url);
+    console.log("This is the query: " + req.parsed_url);
 
 
     if (core_url == '/albums.json') {
@@ -119,7 +120,7 @@ function handle_get_album(req, res) {
     // format of request is /albums/album_name.json
     // get the GET parameters from the URL
     var getp = req.parsed_url.query;
-    console.log("This is the getp: " + getp.toString());
+    console.log("This is the getp: " + getp.page + ' ' + getp.page_size);
     var page_num = getp.page ? getp.page: 0;
     var page_size = getp.page_size ? getp.page_size: 1000;
 
