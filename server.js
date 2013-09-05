@@ -9,7 +9,7 @@ var http = require('http');
 var fs = require('fs');
 
 function load_album_list(callback) {
-    fs.readdir("albums", function(err, files) {
+    fs.readdir("albums/", function(err, files) {
         if(err) {
             callback(make_error("file_error", JSON.stringify(err)));
             return;
