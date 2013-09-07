@@ -187,12 +187,14 @@ function handle_rename_album(req, res) {
             try {
                 var album_data = JSON.parse(json_body);
                 if(!album_data.album_name) {
+                    console.log("Sending failure album_name: " + album_name);
                     send_failure(res, 403, missing_data('album_name'));
                     return;
                 }
             } catch (e) {
                 // got body but not valid json
-                send_failure(res, 403, bad_json());
+                console.log("Sending failure bad_json: " + e);
+                send_failure(res, 403, bad_json(e));
                 return;
             }
 
@@ -215,8 +217,21 @@ function handle_rename_album(req, res) {
     });
 }
 
+function do_rename(old_name, new_name, callback) {
+
+    // rename the album folder.
+    fs.rename(
+        "albums/" + old_name,
+        "albums/" + new_name,
+        callback);
+}
+
 
 // make error goes here...
+
+function bad_json() {
+    console.log("something bad with json!");
+}
 
 function make_error(err, msg) {
     var e = new Error(msg);
@@ -233,6 +248,9 @@ function send_success(res, data) {
 // not sure about this one here... code may be colliding?
 
 function send_failure(res, code, err) {
+    console.log(code);
+    console.log(err);
+
     var code = (err.code) ? err.code : err.name;
     res.writeHead(code, { "Content-Type" : "application/json" });
     res.end(JSON.stringify({ error: code, message: err.message }) + "\n");
