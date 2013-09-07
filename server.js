@@ -182,7 +182,37 @@ function handle_rename_album(req, res) {
         }
     });
 
+    req.on('end', function() {
+        if (json_body) {
+            try {
+                var album_data = JSON.parse(json_body);
+                if(!album_data.album_name) {
+                    send_failure(res, 403, missing_data('album_name'));
+                    return;
+                }
+            } catch (e) {
+                // got body but not valid json
+                send_failure(res, 403, bad_json());
+                return;
+            }
 
+            do_rename(
+                album_name,
+                album_data.album_name, function(err, results) {
+                    if(err && err.code == "ENOENT") {
+                        send_failure(res, 403, no_such_album());
+                        return;
+                    } else if (err) {
+                        send_failure(res, 500, file_error(err));
+                        return;
+                    }
+                    send_success(res, null);
+                });
+        } else {
+            send_failure(res,403, bad_json());
+            res.end();
+        }
+    });
 }
 
 
