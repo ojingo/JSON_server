@@ -158,6 +158,34 @@ function handle_get_album(req, res) {
     });
 }
 
+
+function handle_rename_album(req, res) {
+    var core_url = req.parsed_url.pathname;
+    var parts = core_url.split('/');
+    if (parts.length != 4) {
+        send_failure(res, 404, invalid_resource(core_url));
+        return;
+    }
+
+    var album_name = parts[2];
+
+    // get the post data here it will take in JSON
+    var json_body = '';
+    req.on('readable', function() {
+        var d = req.read();
+        if (d) {
+            if (typeof d == 'string') {
+                json_body += d;
+            } else if (typeof  d == 'object' && d instanceof Buffer) {
+                json_body += d.toString('utf8');
+            }
+        }
+    });
+
+
+}
+
+
 // make error goes here...
 
 function make_error(err, msg) {
