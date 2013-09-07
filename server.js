@@ -108,6 +108,8 @@ function handle_incoming_request(req, res) {
     } else {
         send_failure(res, 404, invalid_resource());
     }
+
+
 }
 
 function handle_list_albums(req, res) {
@@ -194,7 +196,7 @@ function handle_rename_album(req, res) {
             } catch (e) {
                 // got body but not valid json
                 console.log("Sending failure bad_json: " + e);
-                send_failure(res, 403, bad_json(e));
+                send_failure(res, 403, bad_json(e)); // not sure about this stuff here *****
                 return;
             }
 
