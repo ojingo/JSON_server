@@ -96,9 +96,14 @@ function handle_incoming_request(req, res) {
     console.log("This is the query: " + req.parsed_url);
 
 
-    if (core_url == '/albums.json') {
+    if (core_url == '/albums.json' && req.method.toLowerCase() == 'get') {
         handle_list_albums(req, res);
-    } else if (core_url.substr(0, 7) == '/albums' && core_url.substr(core_url.length - 5) == '.json') {
+    } else if (core_url.substr(core_url.length - 12 ) == '/rename.json'
+                && req.method.toLowerCase() == 'post') {
+        handle_rename_album(req, res);
+    } else if (core_url.substr(0,7) == '/albums'
+                && core_url.substr(core_url.length - 5) == '.json'
+                && req.method.toLowerCase() == 'get' ) {
         handle_get_album(req, res);
     } else {
         send_failure(res, 404, invalid_resource());
