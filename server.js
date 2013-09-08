@@ -213,7 +213,7 @@ function handle_rename_album(req, res) {
                     send_success(res, null);
                 });
         } else {
-            send_failure(res,403, bad_json());
+            send_failure(res,403, bad_json()); // not sure... this will cause issues...?
             res.end();
         }
     });
